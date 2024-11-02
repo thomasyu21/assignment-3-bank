@@ -68,6 +68,26 @@ class App extends Component {
   }
 
   // Add debit to debitList and update balance
+  addCredit = (creditForm) => {
+    creditForm.preventDefault();
+    //console.log(creditForm.target[0].value)
+    //console.log(creditForm.target[1].value)
+    const newCredit = {
+      id: this.state.creditList.length+1,
+      description: creditForm.target[0].value,
+      amount: Math.round(Number(creditForm.target[1].value)*100)/100,
+      date: new Date().toISOString().slice(0,10)
+    }
+    //console.log(newCredit)
+    
+    this.setState({creditList: this.state.creditList.concat(newCredit)})
+    //console.log(this.state.creditList)
+
+    this.setState({accountBalance: this.state.accountBalance+newCredit.amount})
+  }
+
+
+  // Add debit to debitList and update balance
   addDebit = (debitForm) => {
     debitForm.preventDefault();
     //console.log(debitForm.target[0].value)
@@ -75,7 +95,7 @@ class App extends Component {
     const newDebit = {
       id: this.state.debitList.length+1,
       description: debitForm.target[0].value,
-      amount: (Math.round(Number(debitForm.target[1].value)*100)/100).toFixed(2),
+      amount: Math.round(Number(debitForm.target[1].value)*100)/100,
       date: new Date().toISOString().slice(0,10)
     }
     //console.log(newDebit)
@@ -94,7 +114,7 @@ class App extends Component {
       <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince} />
     )
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
-    const CreditsComponent = () => (<Credits credits={this.state.creditList} />) 
+    const CreditsComponent = () => (<Credits credits={this.state.creditList} accountBalance={this.state.accountBalance} addCredit={this.addCredit} />) 
     const DebitsComponent = () => (<Debits debits={this.state.debitList} accountBalance={this.state.accountBalance} addDebit={this.addDebit}/>) 
 
     // Important: Include the "basename" in Router, which is needed for deploying the React app to GitHub Pages
