@@ -16,3 +16,7 @@ code {
 input, button {
 	margin: 5px;
 }
+
+h4{
+  margin-bottom: 0;
+}

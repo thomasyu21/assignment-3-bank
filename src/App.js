@@ -67,6 +67,25 @@ class App extends Component {
     }
   }
 
+  // Add debit to debitList and update balance
+  addDebit = (debitForm) => {
+    debitForm.preventDefault();
+    //console.log(debitForm.target[0].value)
+    //console.log(debitForm.target[1].value)
+    const newDebit = {
+      id: this.state.debitList.length+1,
+      description: debitForm.target[0].value,
+      amount: (Math.round(Number(debitForm.target[1].value)*100)/100).toFixed(2),
+      date: new Date().toISOString().slice(0,10)
+    }
+    //console.log(newDebit)
+    
+    this.setState({debitList: this.state.debitList.concat(newDebit)})
+    //console.log(this.state.debitList)
+
+    this.setState({accountBalance: this.state.accountBalance-newDebit.amount})
+  }
+
   // Create Routes and React elements to be rendered using React components
   render() {  
     // Create React elements and pass input props to components
@@ -76,7 +95,7 @@ class App extends Component {
     )
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
     const CreditsComponent = () => (<Credits credits={this.state.creditList} />) 
-    const DebitsComponent = () => (<Debits debits={this.state.debitList} />) 
+    const DebitsComponent = () => (<Debits debits={this.state.debitList} accountBalance={this.state.accountBalance} addDebit={this.addDebit}/>) 
 
     // Important: Include the "basename" in Router, which is needed for deploying the React app to GitHub Pages
     return (
